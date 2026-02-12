@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Valentine 💕</title>
+
+<style>
+  :root{
+    --bg1:#fff0f5;
+    --bg2:#ffe4ec;
+    --card:#ffffff;
+    --pink:#ff5fa2;
+    --lightGray:#d6d6d6;
+    --text:#5a2a3c;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    font-family:"Segoe UI", system-ui, sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    overflow:hidden;
+    color:var(--text);
+    transition:background .8s ease;
+  }
+
+  .heart{
+    position:absolute;
+    font-size:16px;
+    opacity:.6;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp{
+    from{transform:translateY(0); opacity:.6;}
+    to{transform:translateY(-120vh); opacity:0;}
+  }
+
+  .card{
+    width:92%;
+    max-width:380px;
+    background:var(--card);
+    border-radius:20px;
+    padding:22px 20px 26px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    position:relative;
+    z-index:2;
+    animation: fadeIn .8s ease;
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0; transform:translateY(12px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  h1{
+    font-size:1.4rem;
+    margin:6px 0 10px;
+  }
+
+  .question{
+    font-size:1.25rem;
+    font-weight:600;
+    margin:6px 0 14px;
+  }
+
+  p{
+    font-size:.95rem;
+    margin:0 0 14px;
+  }
+
+  .gif{
+    width:100%;
+    border-radius:14px;
+    margin:12px 0 16px;
+  }
+
+  .buttons{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    margin-top:6px;
+  }
+
+  button{
+    border:none;
+    border-radius:999px;
+    padding:12px 20px;
+    font-size:1rem;
+    cursor:pointer;
+    transition:transform .25s ease;
+  }
+
+  #continueBtn,
+  #yesBtn{
+    background:#ff5fa2;
+    color:#fff;
+  }
+
+  #noBtn{
+    background:#d6d6d6;
+    color:#333;
+    position:relative;
+  }
+
+  /* intro */
+  #intro{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    z-index:5;
+  }
+
+  #intro.hide{
+    animation: fadeOut .6s forwards;
+  }
+
+  @keyframes fadeOut{
+    to{opacity:0; visibility:hidden;}
+  }
+</style>
+</head>
+
+<body>
+
+<!-- INTRO PAGE -->
+<div id="intro">
+  <div class="card">
+    <h1>Hi Babi 💕</h1>
+    <p>I made something special for you</p>
+    <img
+      class="gif"
+      src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmZ4M2N2MWp2ZmV4dDg5d2l1Z3Y4dGV0bWx5d3E5bGJmZXRwYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26BRv0ThflsHCqDrG/giphy.gif"
+      alt="Romantic hearts animation"
+    />
+    <button id="continueBtn">Tap to continue 💖</button>
+  </div>
+</div>
+
+<!-- QUESTION PAGE -->
+<div class="card" id="card" style="display:none;">
+  <p>Hi Babi 💕</p>
+
+  <!-- QUESTION MOVED ABOVE GIF & BIGGER -->
+  <div class="question">
+    Will you go on a Valentine’s date with me? 💖
+  </div>
+
+  <img
+    class="gif"
+    src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
+    alt="romantic gif"
+  />
+
+  <div class="buttons">
+    <button id="yesBtn">Yes 💖</button>
+    <button id="noBtn">No 😢</button>
+  </div>
+</div>
+
+<script>
+/* floating hearts */
+for(let i=0;i<18;i++){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.textContent="💗";
+  h.style.left=Math.random()*100+"vw";
+  h.style.bottom="-20px";
+  h.style.animationDuration=(6+Math.random()*6)+"s";
+  h.style.fontSize=(12+Math.random()*16)+"px";
+  document.body.appendChild(h);
+}
+
+/* intro */
+const intro = document.getElementById("intro");
+const continueBtn = document.getElementById("continueBtn");
+const card = document.getElementById("card");
+
+continueBtn.addEventListener("click", () => {
+  intro.classList.add("hide");
+  setTimeout(()=>{ card.style.display="block"; },500);
+});
+
+/* buttons */
+const yesBtn = document.getElementById("yesBtn");
+const noBtn  = document.getElementById("noBtn");
+
+const noMessages = [
+  "Are you sure? 🥺",
+  "Think again 💭",
+  "Pleaseeee 💕",
+  "Don’t do this 😭",
+  "Last chance 😢",
+  "Come on 😖",
+  "Not yet! 🙊",
+  "Why no? 😿",
+  "I’m sad 😔"
+];
+
+let noClicks = 0;
+let yesScale = 1;
+let noScale  = 1;
+const minNoScale = 0.65;
+let canMoveRandomly = false;
+const edgeMargin = 20;
+
+noBtn.addEventListener("click", () => {
+  noClicks++;
+  noBtn.textContent = noMessages[noClicks % noMessages.length];
+
+  yesScale += 0.3;
+  if(noScale > minNoScale){
+    noScale -= 0.08;
+    if(noScale <= minNoScale){
+      noScale = minNoScale;
+      canMoveRandomly = true;
+      noBtn.style.position = "fixed";
+    }
+  }
+
+  yesBtn.style.transform = `scale(${yesScale})`;
+  noBtn.style.transform  = `scale(${noScale})`;
+
+  if(canMoveRandomly){
+    const maxX = window.innerWidth  - noBtn.offsetWidth  - edgeMargin;
+    const maxY = window.innerHeight - noBtn.offsetHeight - edgeMargin;
+    noBtn.style.left = Math.random()*maxX + edgeMargin + "px";
+    noBtn.style.top  = Math.random()*maxY + edgeMargin + "px";
+  }
+});
+
+/* yes click */
+yesBtn.addEventListener("click", () => {
+  // Restore original Valentine background
+  document.body.style.background = "linear-gradient(135deg,#fff0f5,#ffe4ec)";
+
+  card.innerHTML = `
+    <h1>Yey, Babi! 💕</h1>
+    <img class="gif" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" />
+    <p><strong>I can’t wait to spend Valentine’s Day with you 💖</strong></p>
+  `;
+});
+</script>
+
+</body>
+</html>
