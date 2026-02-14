@@ -66,7 +66,7 @@
   }
 
   .question{
-    font-size:1.25rem;
+    font-size:1.4rem;
     font-weight:600;
     margin:6px 0 14px;
   }
@@ -100,17 +100,16 @@
 
   #continueBtn,
   #yesBtn{
-    background:#ff5fa2;
+    background:var(--pink);
     color:#fff;
   }
 
   #noBtn{
-    background:#d6d6d6;
+    background:var(--lightGray);
     color:#333;
     position:relative;
   }
 
-  /* intro */
   #intro{
     position:fixed;
     inset:0;
@@ -137,7 +136,6 @@
 <div id="intro">
   <div class="card">
     <h1>Hi Babi 💕</h1>
-    <p>I made something special for you</p>
     <img
       class="gif"
       src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmZ4M2N2MWp2ZmV4dDg5d2l1Z3Y4dGV0bWx5d3E5bGJmZXRwYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26BRv0ThflsHCqDrG/giphy.gif"
@@ -151,13 +149,13 @@
 <div class="card" id="card" style="display:none;">
   <p>Hi Babi 💕</p>
 
-  <!-- QUESTION MOVED ABOVE GIF & BIGGER -->
   <div class="question">
     Will you go on a Valentine’s date with me? 💖
   </div>
 
   <img
     class="gif"
+    id="questionGif"
     src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
     alt="romantic gif"
   />
@@ -194,6 +192,16 @@ continueBtn.addEventListener("click", () => {
 /* buttons */
 const yesBtn = document.getElementById("yesBtn");
 const noBtn  = document.getElementById("noBtn");
+const questionGif = document.getElementById("questionGif");
+
+/* CARTOON / ANIMATED SAD GIFS */
+const sadGifs = [
+  "https://media.giphy.com/media/9Y5BbDSkSTiY8/giphy.gif",   // cartoon crying
+  "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",   // sad cat
+  "https://media.giphy.com/media/13A7YlLvYVDnmU/giphy.gif",  // Tom crying
+  "https://media.giphy.com/media/ISOckXUybVfQ4/giphy.gif",   // animated sobbing
+  "https://media.giphy.com/media/OPU6wzx8JrHna/giphy.gif"    // cartoon heartbreak
+];
 
 const noMessages = [
   "Are you sure? 🥺",
@@ -216,6 +224,10 @@ const edgeMargin = 20;
 
 noBtn.addEventListener("click", () => {
   noClicks++;
+
+  /* CHANGE GIF TO CARTOON SAD */
+  questionGif.src = sadGifs[noClicks % sadGifs.length];
+
   noBtn.textContent = noMessages[noClicks % noMessages.length];
 
   yesScale += 0.3;
@@ -241,7 +253,6 @@ noBtn.addEventListener("click", () => {
 
 /* yes click */
 yesBtn.addEventListener("click", () => {
-  // Restore original Valentine background
   document.body.style.background = "linear-gradient(135deg,#fff0f5,#ffe4ec)";
 
   card.innerHTML = `
